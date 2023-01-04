@@ -28,9 +28,24 @@ class ConnectedUser {
 		this._x = Math.random() * (AREA_SIZE - ConnectedUser.SIZE);
 		this._y = Math.random() * (AREA_SIZE - ConnectedUser.SIZE);
 
+		this._socket.on("pos", (pos) => {
+			const { x, y } = pos;
+			this.x = x;
+			this.y = y;
+			this.broadcastUpdate();
+		});
+		this._socket.on("color", (color) => {
+			this.color = color;
+			this.broadcastUpdate();
+		});
+		this._socket.on("emote", (emote) => this._socket.broadcast.emit("emote", { username: this.username, emote }));
+		this._socket.on("chat", (message) => io.emit("chat", { type: "GENERAL", username: this.username, message }));
+
 		this._socket.emit("user", { type: "OLD", users: users.map((user) => ({ username: user.username, x: user.x, y: user.y, color: user.color })) });
+
 		users.push(this);
 		io.emit("chat", { type: "USER", message: username + "님이 들어왔습니다." });
+
 		this._socket.broadcast.emit("user", { type: "NEW", user: { username, x: this._x, y: this._y } });
 		this._socket.emit("pos", { username, x: this._x, y: this._y });
 	}
@@ -69,19 +84,6 @@ io.on("connection", (socket) => {
 			user = new ConnectedUser(username, socket, "white");
 		}
 	});
-
-	socket.on("pos", (pos) => {
-		const { x, y } = pos;
-		user.x = x;
-		user.y = y;
-		user.broadcastUpdate();
-	});
-	socket.on("color", (color) => {
-		user.color = color;
-		user.broadcastUpdate();
-	});
-	socket.on("emote", (emote) => socket.broadcast.emit("emote", { username: user.username, emote }));
-	socket.on("chat", (message) => io.emit("chat", { type: "GENERAL", username: user.username, message }));
 
 	socket.on("disconnect", () => user?.broadcastLeave());
 });
