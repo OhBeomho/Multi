@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Multi</title>
+	<link rel="stylesheet" href="/css/main.css">
+	<style>
+		.chat {
+			width: 400px;
+			height: 500px;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.settings {
+			position: relative;
+			overflow: auto;
+			height: 500px;
+		}
+
+		#chatList {
+			flex: 1;
+			overflow: auto;
+			padding: 10px 0;
+			margin: 0;
+			list-style: none;
+		}
+
+		#chatList li {
+			padding: 8px 0;
+		}
+
+		#chatList .general .username {
+			color: rgb(150, 150, 150);
+			font-weight: bold;
+		}
+
+		#chatList .user {
+			color: gray;
+		}
+
+		#chatList .text {
+			word-break: break-all;
+		}
+	</style>
+</head>
+<body>
+	<div style="display: flex; justify-content: center; align-items: center; gap: 20px">
+		<canvas width="500" height="500"></canvas>
+		<div class="chat">
+			<ul id="chatList"></ul>
+			<textarea id="chatInput" rows="3" placeholder="Enter message" style="resize: none"></textarea>
+		</div>
+		<div class="settings">
+			<p>Color: <input type="color" id="colorInput" value="#ffffff" /></p>
+			<p style="position: absolute; bottom: 0"><a href="/" style="color: white">Leave</a></p>
+		</div>
+	</div>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/js/main.js"></script>
+</body>
+</html>
