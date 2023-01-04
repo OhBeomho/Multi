@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import { renderFile } from "ejs";
 import { Server, Socket } from "socket.io";
@@ -85,4 +86,4 @@ io.on("connection", (socket) => {
 	socket.on("disconnect", () => user?.broadcastLeave());
 });
 
-server.listen(8080, () => console.log("Server is running on port 8080."));
+server.listen(process.env.PORT, () => console.log("Server is running on port " + process.env.PORT));
