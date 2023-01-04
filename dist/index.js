@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require("dotenv/config");
 const express_1 = __importDefault(require("express"));
 const ejs_1 = require("ejs");
 const socket_io_1 = require("socket.io");
@@ -82,4 +83,4 @@ io.on("connection", (socket) => {
     socket.on("chat", (message) => io.emit("chat", { type: "GENERAL", username: user.username, message }));
     socket.on("disconnect", () => user === null || user === void 0 ? void 0 : user.broadcastLeave());
 });
-server.listen(8080, () => console.log("Server is running on port 8080."));
+server.listen(process.env.PORT, () => console.log("Server is running on port " + process.env.PORT));
