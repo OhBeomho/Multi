@@ -68,7 +68,6 @@ class ConnectedUser {
 	}
 
 	broadcastLeave() {
-		users.splice(users.indexOf(this), 1);
 		io.emit("chat", { type: "USER", message: this.username + "님이 나갔습니다.", leaveUser: this.username });
 		this._socket.broadcast.emit("user", { type: "LEAVE", user: this.username });
 	}
@@ -85,7 +84,12 @@ io.on("connection", (socket) => {
 		}
 	});
 
-	socket.on("disconnect", () => user?.broadcastLeave());
+	socket.on("disconnect", () => {
+		if (user) {
+			user.broadcastLeave();
+			users.splice(users.indexOf(user), 1);
+		}
+	});
 });
 
 server.listen(process.env.PORT, () => console.log("Server is running on port " + process.env.PORT));
